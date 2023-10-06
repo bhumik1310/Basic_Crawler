@@ -9,4 +9,4 @@ A basic JS crawler that is subdivided into two scripts.
 - Check the links present in ./storage/key_value_stores/my-data/OUTPUT.csv and modify the ones you do not want to crawl.
 - Make sure you have a folder named "CrawledData" in the directory as well.
 - run `node Crawl_links.js`
-- This automatically pulls the links from the CSV ,crawls them , processes out the Headers, Footers , nav etc. from the files and stores them in the folder "CrawledData/<website name>" 
+- This automatically pulls the links from the CSV ,crawls them , processes out the Headers, Footers , nav etc. from the files and stores them in the folder "CrawledData/<website-name>" 
