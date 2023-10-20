@@ -3,6 +3,8 @@ const require = createRequire(import.meta.url);
 const sanitizeFilename = require('sanitize-filename');
 const path = require('path');
 const url = require('url');
+import { JSDOM } from 'jsdom';
+import { Readability } from '@mozilla/readability';
 const tldextract = require('tld-extract') 
 
 
@@ -15,26 +17,32 @@ const csv = require('csv-parser');
 const crawler = new CheerioCrawler({
     async requestHandler({ $,request,body }) {
         const title = $('title').text();
+        // Depracated , use only if not using library to parse the DOM.
+        // function cleanString(input) {
 
-        function cleanString(input) {
-
-            return input.replace(/<header[^>]*>[\s\S]*?<\/header>/gi, '')
-           .replace(/<footer[^>]*>[\s\S]*?<\/footer>/gi, '')
-           .replace(/<nav[^>]*>[\s\S]*?<\/nav>/gi, '')
-           .replace(/<header-class[^>]*>[\s\S]*?<\/header-class>/gi, '')
-           .replace(/<footer-class[^>]*>[\s\S]*?<\/footer-class>/gi, '')
-           .replace(/<main-menu[^>]*>[\s\S]*?<\/main-menu>/gi, '')
-           .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
-           .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
-           .replace(/<[^>]*>/g, '')
-           .replace(/\s+/g, ' ');
+        //     return input.replace(/<header[^>]*>[\s\S]*?<\/header>/gi, '')
+        //    .replace(/<footer[^>]*>[\s\S]*?<\/footer>/gi, '')
+        //    .replace(/<nav[^>]*>[\s\S]*?<\/nav>/gi, '')
+        //    .replace(/<header-class[^>]*>[\s\S]*?<\/header-class>/gi, '')
+        //    .replace(/<footer-class[^>]*>[\s\S]*?<\/footer-class>/gi, '')
+        //    .replace(/<main-menu[^>]*>[\s\S]*?<\/main-menu>/gi, '')
+        //    .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
+        //    .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
+        //    .replace(/<[^>]*>/g, '')
+        //    .replace(/\s+/g, ' ');
          
-        }
+        // }
+        var dom = new JSDOM(body);
 
+        // Create a Readability object and parse the DOM document
+        var reader = new Readability(dom.window.document);
+        var article = reader.parse();    
+        var content = article.textContent;
         console.log(`The title: ${title}`);
         await Dataset.pushData({
             url:request.url,
-            page_content: cleanString(body)
+            content : content
+            // page_content: cleanString(body)
         })
     }
 })
