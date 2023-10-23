@@ -14,7 +14,9 @@ const crawler = new CheerioCrawler({
             strategy:'same-origin'
         });
     },
-    maxRequestsPerCrawl: 2000, // Limitation for only 10 requests (do not use if you want to crawl all links)
+    maxRequestsPerCrawl: 2000,
+    additionalMimeTypes:['application/pdf']
+    // Limitation for only 10 requests (do not use if you want to crawl all links)
 });
 
 // Run the crawler with initial request
